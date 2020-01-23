@@ -91,3 +91,6 @@ Simulations can be replayed using different design parameter values to change th
 #### Design Space Exploration
 
 TBD
+=======
+# example-DT-line_following_robot
+This example demonstrates transmission of data from a deployed line following robot, a correlated detection of its postion on a track via a camera and image recognition, and making it available in a co-simulation with its digital twin.
