@@ -1,0 +1,100 @@
+{
+    "algorithm": {},
+    "objectiveConstraints": [],
+    "objectiveDefinitions": {
+        "externalScripts": {
+			"meanSpeed": {
+                "scriptFile": "meanSpeed.py",
+                "scriptParameters": {
+                    "1": "step-size",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y"
+					}
+				},
+			"lapTime": {
+                "scriptFile": "lapTime.py",
+                "scriptParameters": {
+                    "1": "time",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y",
+					"4": "studentMap"
+					}
+				},
+			"maxCrossTrackError": {
+                "scriptFile": "maxCrosstrackError.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.robot_x",
+					"2": "{bodyFMU}.body.robot_y"
+					}
+				},	
+			"meanCrossTrackError": {
+                "scriptFile": "meanCrosstrackError.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.robot_x",
+					"2": "{bodyFMU}.body.robot_y"
+					}
+				},
+			"lapEnergy": {
+                "scriptFile": "lapEnergy.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.total_energy_used",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y"
+					}
+				}
+            
+        },
+        "internalFunctions": {}
+    },
+    "parameterConstraints": [],
+    "parameters": {
+         "{sensor1FMU}.sensor1.lf_position_x": [
+            0.01,
+			0.03,
+			0.05
+        ],
+        "{sensor1FMU}.sensor1.lf_position_y": [
+        	0.01,
+            0.07,
+			0.13
+        ],
+		"{sensor2FMU}.sensor2.lf_position_x": [
+            -0.01,
+			-0.03,
+			-0.05
+        ],
+        "{sensor2FMU}.sensor2.lf_position_y": [
+        	0.01,
+            0.07,
+			0.13
+        ],
+        "{controllerFMU}.controller.forwardSpeed": [
+			0.4,
+			0.7,
+			1.0
+        ],
+        "{controllerFMU}.controller.forwardRotate": [
+            0.3,
+			0.6,
+			0.9
+        ],
+		"{controllerFMU}.controller.backwardRotate": [
+			0.1,
+			0.3,
+			0.5
+        ]
+    },
+    "ranking": {
+        "pareto": {
+            "lapTime": "-",
+            "meanCrossTrackError": "-"
+        }
+    },
+	"scenarios": [
+		"studentMap"
+	],
+    "simulation": {
+        "endTime": "40",
+        "startTime": "0"
+    }
+}

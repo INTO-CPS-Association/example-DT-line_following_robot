@@ -1,0 +1,838 @@
+<?xml version="1.0" ?>
+<TARGET xml:space='preserve'>
+	<GENERAL>
+		<VERSION>2.2.0</VERSION>
+		<NAME>INTO-CPS Line-Follower (Raspberry Pi 3, Raspbian, Xenomai 2.6.5)</NAME>
+		<TYPE>LINUX</TYPE>
+		<DIRECTORY>%FC_FORSEEDIR%\target\raspberry-pi</DIRECTORY>
+		<DESCRIPTION>
+			<![CDATA[This target template is compatible with Raspbian Jessie Linux 4.1.21 with Xenomai 2.6.5 running on an Raspberry Pi.
+			
+			Raspberry Pi and the Raspberry Pi logo are a trademark of the Raspberry Pi Foundation.
+			
+			WiringPi https://projects.drogon.net/raspberry-pi/wiringpi/
+			Copyright (C) Gordon Henderson
+			]]>
+		</DESCRIPTION>
+		<HELPFILE></HELPFILE>
+		<IMAGE>xenomai.png</IMAGE>
+		<ICON>raspberry-pi.ico</ICON>
+		<MAXLOGSIZE>16777216</MAXLOGSIZE>
+		<FILES_TO_COPY />
+		<FILES_TO_PARSE />
+		<FILES_TO_TARGET>
+			<FILE>%FC_MODELBUILDDIR%\%FC_MODELNAME%</FILE>
+			<FILE>%FC_MODELBUILDDIR%\lib%FC_MODELNAME%_ipc.so</FILE>
+			<FILE>%FC_MODELDIR%\%FC_MODELNAME%.mcf</FILE>
+		</FILES_TO_TARGET>
+		<TOKENS>
+			<TOKENPARSER>TokenParser_linefollower.xml</TOKENPARSER>
+		</TOKENS>
+		<INCLUDES>
+			<![CDATA[#include <stdlib.h>
+			#include "wiringPi/wiringPi.h"]]>
+		</INCLUDES>
+		<CUSTOMCONFIG>-</CUSTOMCONFIG>
+		<GLOBALS>
+			<![CDATA[]]>
+		</GLOBALS>
+		<INIT>
+			<![CDATA[wiringPiSetupGpio(); /* Use the broadcom GPIO numbers */]]>
+		</INIT>
+		<CLOSE>
+			<![CDATA[]]>
+		</CLOSE>
+	</GENERAL>
+
+	<LOGGING>
+		<PLUGIN>command/xmlrpc/CommandPluginXmlRpc.dll</PLUGIN>
+		<DEFAULTSETTINGS>
+			<SETTING>
+				<NAME>HOST</NAME>
+				<VALUE>10.0.1.163</VALUE>
+			</SETTING>
+			<SETTING>
+				<NAME>PORT</NAME>
+				<VALUE>1500</VALUE>
+			</SETTING>
+		</DEFAULTSETTINGS>
+	</LOGGING>
+	
+	<COMPILERASSISTANT autostart="yes">
+		<COMPILER label="Raspbian Windows Cross compiler">
+			<TYPE>gcc</TYPE>
+			<HOST>win32</HOST>
+			<TARGET>arm</TARGET>
+			<CROSSCOMPILE_PREFIX>arm-rpi-linux-gnueabi-</CROSSCOMPILE_PREFIX>
+			<PATHS>
+				<PATH>%FC_FORSEEDIR%\toolchain\bin\</PATH><!-- For make //-->
+				<PATH>%FC_FORSEEDIR%\toolchain\rpi_raspbian_cross_cc\bin\</PATH>
+			</PATHS>
+			<TOOLS>
+				<C_COMPILER>arm-rpi-linux-gnueabi-gcc.exe</C_COMPILER>
+				<CXX_COMPILER>arm-rpi-linux-gnueabi-g++.exe</CXX_COMPILER>
+				<LINKER>arm-rpi-linux-gnueabi-ld.exe</LINKER>
+				<AR>arm-rpi-linux-gnueabi-ar.exe</AR>
+				<ASSEMBLER>arm-rpi-linux-gnueabi-as.exe</ASSEMBLER>
+				<STRIP>arm-rpi-linux-gnueabi-strip.exe</STRIP>
+				<OBJCOPY>arm-rpi-linux-gnueabi-objcopy.exe</OBJCOPY>
+				<OBJDUMP>arm-rpi-linux-gnueabi-objdump.exe</OBJDUMP>
+				<MAKE>make.exe</MAKE>
+			</TOOLS>
+			<COMPILE_FLAGS><![CDATA[-O2 -Wall]]></COMPILE_FLAGS>
+			<DEFINES><![CDATA[%4C_COMPILE_DEFINITIONS% -D_GNU_SOURCE -D_REENTRANT -D__XENO__ -DALLOW_MISSING_SHM]]></DEFINES>
+			<INCLUDE_FLAGS><![CDATA[-I. %4C_COMPILE_INCLUDE_DIRECTORIES% -I"%FC_TARGETDIR%\include\xenomai-2.6.5" -IwiringPi]]></INCLUDE_FLAGS>
+			<LINKER_FLAGS><![CDATA[%4C_COMPILE_LIBRARY_DIRECTORIES% -L"%FC_TARGETDIR%\lib\xenomai-2.6.5" %4C_COMPILE_LIBRARIES% -lnative -lxenomai -lpthread -lrt -lm]]></LINKER_FLAGS>
+		</COMPILER>
+		<EXECUTE>
+			<ENVIRONMENT override="yes">
+				<VARIABLE>PATH</VARIABLE>
+				<VALUE>%FC_FORSEEDIR%\toolchain\rpi_raspbian_cross_cc\bin;%FC_FORSEEDIR%\toolchain\bin</VALUE>
+			</ENVIRONMENT>
+			<COMMAND>
+				<![CDATA[%4C_TARGET_MAKE% all]]>
+			</COMMAND>
+		</EXECUTE>
+	</COMPILERASSISTANT>
+
+	<COMPONENTS>
+		<INPUT>
+			<COMPONENT>
+				<NAME>GPIO Digital Input</NAME>
+				<DESCRIPTION>
+					<![CDATA[Connect to the P1 pins as digital input
+					]]>
+				</DESCRIPTION>
+				<INCLUDES/>
+				<VARIABLES>
+					<![CDATA[]]>
+				</VARIABLES>
+				<CONSTRUCT/>
+				<INIT>
+					<![CDATA[pinMode(%PORT_CHANNEL%, INPUT); /* GPIO Digital Input %PORT_NAME% */]]>
+				</INIT>
+				<CLOSE/>
+				<DESTRUCT/>
+				<FUNCTION>
+					<![CDATA[%VAR% = (XXDouble) digitalRead(%PORT_CHANNEL%); /* %PORT_NAME% */]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>GPIO 2</NAME>
+						<CHANNEL>2</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/3</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 3</NAME>
+						<CHANNEL>3</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/5</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 4</NAME>
+						<CHANNEL>4</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/7</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 5</NAME>
+						<CHANNEL>5</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/29</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 6</NAME>
+						<CHANNEL>6</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/31</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 7</NAME>
+						<CHANNEL>7</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/26</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 8</NAME>
+						<CHANNEL>8</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/24</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 9</NAME>
+						<CHANNEL>9</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/21</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 10</NAME>
+						<CHANNEL>10</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/19</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 11</NAME>
+						<CHANNEL>11</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/23</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 12</NAME>
+						<CHANNEL>12</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/32</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 13</NAME>
+						<CHANNEL>13</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/33</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 14</NAME>
+						<CHANNEL>14</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/8</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 15</NAME>
+						<CHANNEL>15</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/10</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 16</NAME>
+						<CHANNEL>16</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/36</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 17</NAME>
+						<CHANNEL>17</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/11</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 18</NAME>
+						<CHANNEL>18</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/12</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 19</NAME>
+						<CHANNEL>19</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/35</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 20</NAME>
+						<CHANNEL>20</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/38</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 21</NAME>
+						<CHANNEL>21</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/40</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 22</NAME>
+						<CHANNEL>22</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/15</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 23</NAME>
+						<CHANNEL>23</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/16</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 24</NAME>
+						<CHANNEL>24</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/18</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 25</NAME>
+						<CHANNEL>25</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/22</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 26</NAME>
+						<CHANNEL>26</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/37</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 27</NAME>
+						<CHANNEL>27</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/13</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+			<COMPONENT>
+				<NAME>Analog input (ADS1015)</NAME>
+				<DESCRIPTION>
+					<![CDATA[Read analog inputs using the ADS1015 via i2C.
+					Requires an external ADS1015 breakout board connected to the I2C pins SDA (GPIO2) and SCL (GPIO3)
+					This component expects the ADS1015 chip at i2c address 0x48.
+					The Programmable Gain Ampifier is configured for the +/- 6.144 {V} range.
+					]]>
+				</DESCRIPTION>
+				<INCLUDES>
+					<![CDATA[#include "wiringPi/ads1015.h"]]>
+				</INCLUDES>
+				<VARIABLES>
+					<![CDATA[]]>
+				</VARIABLES>
+				<CONSTRUCT>
+					<![CDATA[ads1015Setup (110, 0x48); //Set-up of the ADS1015 with an offset of 110]]>
+				</CONSTRUCT>
+				<INIT>
+					<![CDATA[digitalWrite(110 + ADS1015_GAIN_CONTROL, ADS1015_GAIN_6144); // Put the PGA in full scale range 6.144 V
+					digitalWrite(110 + ADS1015_DATA_RATE_CONTROL, ADS1015_DR_1600); // Put the PGA in full scale range 6.144 V
+					digitalWrite(110 + ADS1015_MODE_CONTROL, ADS1015_MODE_CONTINUOUS); // Continuous conversion mode
+					pinMode(%PORT_CHANNEL%, INPUT); /* Analog input %PORT_NAME% */]]>
+				</INIT>
+				<CLOSE/>
+				<DESTRUCT>
+					<![CDATA[digitalWrite(110 + ADS1015_MODE_CONTROL, ADS1015_MODE_SINGLE_SHOT); // Stop automatic conversion (enters power-save)]]>
+				</DESTRUCT>
+				<FUNCTION>
+					<![CDATA[%VAR% = (((XXDouble) (analogRead(%PORT_CHANNEL%))) / 32767) * 6.144; /* %PORT_NAME% */]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>A0 (Single)</NAME>
+						<CHANNEL>110</CHANNEL><!-- CONFIG_MUX_SINGLE_0 //-->
+						<PINS>
+							<PIN>RPi/I2C/x048/A0</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A1 (Single)</NAME>
+						<CHANNEL>111</CHANNEL><!-- CONFIG_MUX_SINGLE_1 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x48/A1</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A2 (Single)</NAME>
+						<CHANNEL>112</CHANNEL>
+						<PINS>
+							<PIN>RPi/I2C/0x48/A2</PIN><!-- CONFIG_MUX_SINGLE_2 //-->
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A3 (Single)</NAME>
+						<CHANNEL>113</CHANNEL>
+						<PINS>
+							<PIN>RPi/I2C/0x48/A3</PIN><!-- CONFIG_MUX_SINGLE_3 //-->
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A0-A1 (Differential)</NAME>
+						<CHANNEL>114</CHANNEL><!-- CONFIG_MUX_DIFF_0_1 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x48/A0</PIN>
+							<PIN>RPi/I2C/0x48/A1</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A2-A3 (Differential)</NAME>
+						<CHANNEL>115</CHANNEL><!-- CONFIG_MUX_DIFF_2_3 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x48/A2</PIN>
+							<PIN>RPi/I2C/0x48/A3</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A0-A3 (Differential)</NAME>
+						<CHANNEL>116</CHANNEL><!-- CONFIG_MUX_DIFF_0_3 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x48/A0</PIN>
+							<PIN>RPi/I2C/0x48/A3</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>A1-A3 (Differential)</NAME>
+						<CHANNEL>117</CHANNEL><!-- CONFIG_MUX_DIFF_1_3 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x48/A1</PIN>
+							<PIN>RPi/I2C/0x48/A3</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+			<COMPONENT>
+				<NAME>Linefollower sensor</NAME>
+				<DESCRIPTION>
+					<![CDATA[Read line follower sensors.
+					]]>
+				</DESCRIPTION>
+				<INCLUDES>
+					<![CDATA[#include "linefollower/io.h"]]>
+				</INCLUDES>
+				<VARIABLES>
+					<![CDATA[]]>
+				</VARIABLES>
+				<CONSTRUCT>
+					<![CDATA[#ifndef LINEFOLLOWER_SETUP
+					#define LINEFOLLOWER_SETUP
+					lineFollowerSetup(120, 0x29);
+					#endif
+					]]>
+				</CONSTRUCT>
+				<INIT>
+					<![CDATA[]]>
+				</INIT>
+				<CLOSE/>
+				<DESTRUCT>
+					<![CDATA[]]>
+				</DESTRUCT>
+				<FUNCTION>
+					<![CDATA[%VAR% = (XXDouble) analogRead(%PORT_CHANNEL%); /* %PORT_NAME% */]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>Left sensor</NAME>
+						<CHANNEL>120</CHANNEL><!-- CONFIG_MUX_SINGLE_0 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x29/leftSensor</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>Right sensor</NAME>
+						<CHANNEL>121</CHANNEL><!-- CONFIG_MUX_SINGLE_1 //-->
+						<PINS>
+							<PIN>RPi/I2C/0x29/rightSensor</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+		</INPUT>
+		<OUTPUT>
+			<COMPONENT>
+				<NAME>GPIO Digital Output</NAME>
+				<DESCRIPTION>
+					<![CDATA[Connect to the P1 pins as digital output
+					]]>
+				</DESCRIPTION>
+				<INCLUDES/>
+				<VARIABLES/>
+				<CONSTRUCT/>
+				<DESTRUCT/>
+				<INIT>
+					<![CDATA[pinMode(%PORT_CHANNEL%, OUTPUT); /* GPIO Digital Output %PORT_NAME% */]]>
+				</INIT>
+				<CLOSE>
+					<![CDATA[digitalWrite(%PORT_CHANNEL%, LOW); /* Make output low (%PORT_NAME%) */
+					pinMode(%PORT_CHANNEL%, INPUT);    /* Reset state back to input (%PORT_NAME%) */]]>
+				</CLOSE>
+				<FUNCTION>
+					<![CDATA[digitalWrite(%PORT_CHANNEL%, ((%VAR% > 0.0) ? HIGH : LOW)); /* %PORT_NAME% */]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>GPIO 2</NAME>
+						<CHANNEL>2</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/3</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 3</NAME>
+						<CHANNEL>3</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/5</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 4</NAME>
+						<CHANNEL>4</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/7</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 5</NAME>
+						<CHANNEL>5</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/29</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 6</NAME>
+						<CHANNEL>6</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/31</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 7</NAME>
+						<CHANNEL>7</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/26</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 8</NAME>
+						<CHANNEL>8</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/24</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 9</NAME>
+						<CHANNEL>9</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/21</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 10</NAME>
+						<CHANNEL>10</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/19</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 11</NAME>
+						<CHANNEL>11</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/23</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 12</NAME>
+						<CHANNEL>12</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/32</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 13</NAME>
+						<CHANNEL>13</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/33</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 14</NAME>
+						<CHANNEL>14</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/8</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 15</NAME>
+						<CHANNEL>15</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/10</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 16</NAME>
+						<CHANNEL>16</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/36</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 17</NAME>
+						<CHANNEL>17</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/11</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 18</NAME>
+						<CHANNEL>18</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/12</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 19</NAME>
+						<CHANNEL>19</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/35</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 20</NAME>
+						<CHANNEL>20</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/38</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 21</NAME>
+						<CHANNEL>21</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/40</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 22</NAME>
+						<CHANNEL>22</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/15</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 23</NAME>
+						<CHANNEL>23</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/16</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 24</NAME>
+						<CHANNEL>24</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/18</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 25</NAME>
+						<CHANNEL>25</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/22</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 26</NAME>
+						<CHANNEL>26</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/37</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 27</NAME>
+						<CHANNEL>27</CHANNEL>
+						<PINS>
+							<PIN>RPi/J8/13</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+			<COMPONENT>
+				<NAME>PWM Output</NAME>
+				<DESCRIPTION>
+					<![CDATA[Connect to the P1 pin GPIO18 as PWM output
+					]]>
+				</DESCRIPTION>
+				<INCLUDES>
+					<![CDATA[#include <unistd.h>]]>
+				</INCLUDES>
+				<VARIABLES/>
+				<CONSTRUCT/>
+				<DESTRUCT/>
+				<INIT>
+					<![CDATA[pinMode(%PORT_CHANNEL%, PWM_OUTPUT); /* %PORT_NAME% on GPIO%PORT_CHANNEL% */
+					usleep(1000);
+					pwmSetMode(PWM_MODE_MS);
+					usleep(1000);
+					pwmSetRange(1024); /* 10-bit PWM */
+					usleep(1000);
+					pwmSetClock(%PORT_MODE%) ; /* 19200000 / (%PORT_MODE%*1024) Hz PWM - Also starts the PWM */
+					usleep(1000);
+					pwmSetMode(PWM_MODE_MS);
+					usleep(1000);
+					pwmSetRange(1024); /* 10-bit PWM */
+					usleep(1000);
+					pwmSetClock(%PORT_MODE%) ; /* 19200000 / (%PORT_MODE%*1024) Hz PWM - Also starts the PWM */
+					]]>
+				</INIT>
+				<CLOSE>
+					<![CDATA[pwmWrite(%PORT_CHANNEL%, 0);
+					pwmSetMode(PWM_MODE_BAL);          /* Restore the default PWM mode */
+					usleep(1000);
+					pinMode(%PORT_CHANNEL%, INPUT);    /* Reset state back to input (GPIO%PORT_CHANNEL%) */
+					usleep(1000);
+					pinMode(%PORT_CHANNEL%, INPUT);    /* Reset state back to input (GPIO%PORT_CHANNEL%) */
+					]]>
+				</CLOSE>
+				<FUNCTION>
+					<![CDATA[/* %PORT_NAME% on GPIO%PORT_CHANNEL% */
+					if (%VAR% > 1.0)
+					  pwmWrite(%PORT_CHANNEL%, 1023);
+					else if (%VAR% < 0.0)
+					  pwmWrite(%PORT_CHANNEL%, 0);
+					else
+					  pwmWrite(%PORT_CHANNEL%, (int)(%VAR% * 1024));]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>GPIO 12 PWM motor (9,3 kHz)</NAME>
+						<CHANNEL>12</CHANNEL>
+						<MODE>2</MODE>
+						<PINS>
+							<PIN>RPi/J8/32</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 12 PWM motor (2,0 kHz)</NAME>
+						<CHANNEL>12</CHANNEL>
+						<MODE>9</MODE>
+						<PINS>
+							<PIN>RPi/J8/32</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 12 PWM servo/LED (46.87 Hz)</NAME>
+						<CHANNEL>12</CHANNEL>
+						<MODE>400</MODE>
+						<PINS>
+							<PIN>RPi/J8/32</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 18 PWM motor (9,3 kHz)</NAME>
+						<CHANNEL>18</CHANNEL>
+						<MODE>2</MODE>
+						<PINS>
+							<PIN>RPi/J8/12</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 18 PWM motor (2,0 kHz)</NAME>
+						<CHANNEL>18</CHANNEL>
+						<MODE>9</MODE>
+						<PINS>
+							<PIN>RPi/J8/12</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>GPIO 18 PWM servo/LED (46.87 Hz)</NAME>
+						<CHANNEL>18</CHANNEL>
+						<MODE>400</MODE>
+						<PINS>
+							<PIN>RPi/J8/12</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+			<COMPONENT>
+				<NAME>Analog output (MCP4725)</NAME>
+				<DESCRIPTION>
+					<![CDATA[12-bit analog output using the MCP4725 i2c DAC
+					Requires an external MCP4725 breakout board connected to the I2C pins SDA (GPIO2) and SCL (GPIO3)
+					This component expects the MCP4725 chip at address 0x62.
+					The output voltage depends on the supply voltage of the chip.
+					For a supply voltage of 3.3 {V} writing a value of 1.0 results in a voltage of 3.3 {V}.
+					Valid input range: 0.0 - 1.0. This is mapped to the full rail-to-rail range of the MCP4725.
+					]]>
+				</DESCRIPTION>
+				<INCLUDES>
+					<![CDATA[#include "wiringPi/mcp4725.h"]]>
+				</INCLUDES>
+				<VARIABLES/>
+				<CONSTRUCT>
+					<![CDATA[if (mcp4725Setup(120, 0x62) < 0) return IVCIO_FAILED;
+					]]>
+				</CONSTRUCT>
+				<DESTRUCT/>
+				<INIT>
+					<![CDATA[
+					]]>
+				</INIT>
+				<CLOSE>
+					<![CDATA[analogWrite(%CHANNEL%, 0);
+					]]>
+				</CLOSE>
+				<FUNCTION>
+					<![CDATA[analogWrite(120, (int)(%VAR% * 4095));]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>A0</NAME>
+						<CHANNEL>120</CHANNEL>
+						<PINS>
+							<PIN>RPi/I2C/0x62/A0</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+			<COMPONENT>
+				<NAME>Linefollower motor</NAME>
+				<DESCRIPTION>
+					<![CDATA[Write line follower motors.
+					]]>
+				</DESCRIPTION>
+				<INCLUDES>
+					<![CDATA[#include "linefollower/io.h"]]>
+				</INCLUDES>
+				<VARIABLES>
+					<![CDATA[]]>
+				</VARIABLES>
+				<CONSTRUCT>
+					<![CDATA[#ifndef LINEFOLLOWER_SETUP
+					#define LINEFOLLOWER_SETUP
+					lineFollowerSetup(120, 0x29);
+					#endif
+					]]>
+				</CONSTRUCT>
+				<INIT>
+					<![CDATA[]]>
+				</INIT>
+				<CLOSE/>
+				<DESTRUCT>
+					<![CDATA[]]>
+				</DESTRUCT>
+				<FUNCTION>
+					<![CDATA[analogWrite(%PORT_CHANNEL%, (int) %VAR%); /* %PORT_NAME% */]]>
+				</FUNCTION>
+				<PORTS>
+					<PORT>
+						<NAME>Left motor</NAME>
+						<CHANNEL>123</CHANNEL>
+						<PINS>
+							<PIN>RPi/I2C/0x29/leftMotor</PIN>
+						</PINS>
+					</PORT>
+					<PORT>
+						<NAME>Right motor</NAME>
+						<CHANNEL>124</CHANNEL>
+						<PINS>
+							<PIN>RPi/I2C/0x29/rightMotor</PIN>
+						</PINS>
+					</PORT>
+				</PORTS>
+			</COMPONENT>
+		</OUTPUT>
+	</COMPONENTS>
+</TARGET>
+

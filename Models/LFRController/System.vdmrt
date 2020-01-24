@@ -1,0 +1,26 @@
+system System
+
+instance variables
+
+  -- Hardware interface variable required by FMU Import/Export
+  public static hwi: HardwareInterface := new HardwareInterface();  
+  
+  public static controller : [Controller] := nil;
+
+  cpu : CPU := new CPU(<FP>, 1E6);
+
+operations
+
+public System : () ==> System
+System () == (
+	let servoLeft = new RobotServo(hwi.servo_left_out),
+	    servoRight = new RobotServo(hwi.servo_right_out),
+	    sensorRightVal = new RobotSensor(hwi.rightVal),
+	    sensorLeftVal = new RobotSensor(hwi.leftVal)
+	in
+			controller := new Controller(servoLeft, servoRight, sensorRightVal, sensorLeftVal);
+	
+	cpu.deploy(controller);
+
+);
+end System

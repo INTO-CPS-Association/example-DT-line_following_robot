@@ -1,0 +1,27 @@
+{
+	"startTime": 0,
+	"endTime": 40,
+	"multimodel_path": "Multi-Models\\lfr-3d-map1\\lfr-3d.mm.json",
+	"livestream": {
+		"{sensorFMU}.sensor1": ["lf_1_sensor_reading"],
+		"{sensorFMU}.sensor2": ["lf_1_sensor_reading"],
+		"{controllerFMU}.controller": ["servoLeftVal", "servoRightVal"]
+	},
+	"livestreamInterval": 0,
+	"visible": false,
+	"loggingOn": false,
+	"overrideLogLevel": null,
+	"enableAllLogCategoriesPerInstance": false,
+	"algorithm": {
+		"type": "var-step",
+		"initsize": 0.1,
+		"size": [0.05, 0.2],
+		"constraints": {}
+	},
+	"postProcessingScript": "",
+	"multimodel_crc": null,
+	"parallelSimulation": false,
+	"stabalizationEnabled": false,
+	"global_absolute_tolerance": 0,
+	"global_relative_tolerance": 0.01
+}

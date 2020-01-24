@@ -1,0 +1,15 @@
+class RobotSensor
+
+instance variables
+
+port : RealPort;
+
+operations
+
+public RobotSensor: RealPort ==> RobotSensor
+RobotSensor(p) == port := p;
+
+public getReading: () ==> real
+getReading()== return port.getValue();
+
+end RobotSensor

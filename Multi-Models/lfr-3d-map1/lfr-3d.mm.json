@@ -1,0 +1,34 @@
+{
+	"fmus": {
+		"{controllerFMU}": "LFRController.fmu",
+		"{sensorFMU}": "Sensor_Map1.fmu",
+		"{bodyFMU}": "Body.fmu",
+		"{3DFMU}": "3D_Map1.fmu"
+	},
+	"connections": {
+		"{bodyFMU}.body.robot_x": ["{sensorFMU}.sensor1.robot_x", "{sensorFMU}.sensor2.robot_x", "{3DFMU}.3DFMU.Body\\robot_x"],
+		"{bodyFMU}.body.robot_y": ["{sensorFMU}.sensor1.robot_y", "{sensorFMU}.sensor2.robot_y", "{3DFMU}.3DFMU.Body\\robot_y"],
+		"{bodyFMU}.body.robot_z": ["{sensorFMU}.sensor1.robot_z", "{sensorFMU}.sensor2.robot_z"],
+		"{bodyFMU}.body.robot_theta": ["{sensorFMU}.sensor1.robot_theta", "{sensorFMU}.sensor2.robot_theta", "{3DFMU}.3DFMU.Body\\robot_theta"],
+		"{bodyFMU}.body.total_energy_used": ["{controllerFMU}.controller.total_energy_used"],
+		"{bodyFMU}.body.wheel_left_rotation": ["{3DFMU}.3DFMU.Body\\wheel_left_rotation"],
+		"{bodyFMU}.body.wheel_right_rotation": ["{3DFMU}.3DFMU.Body\\wheel_right_rotation"],
+		"{sensorFMU}.sensor1.lf_1_sensor_reading": ["{controllerFMU}.controller.lfLeftVal", "{3DFMU}.3DFMU.Environment\\Sensors_Block\\lf_1_sensor_reading"],
+		"{sensorFMU}.sensor1.offset_x": ["{3DFMU}.3DFMU.lf_positions[1,1]"],
+		"{sensorFMU}.sensor1.offset_y": ["{3DFMU}.3DFMU.lf_positions[1,2]"],
+		"{sensorFMU}.sensor2.lf_1_sensor_reading": ["{controllerFMU}.controller.lfRightVal", "{3DFMU}.3DFMU.Environment\\Sensors_Block\\lf_2_sensor_reading"],
+		"{sensorFMU}.sensor2.offset_x": ["{3DFMU}.3DFMU.lf_positions[2,1]"],
+		"{sensorFMU}.sensor2.offset_y": ["{3DFMU}.3DFMU.lf_positions[2,2]"],
+		"{controllerFMU}.controller.servoRightVal": ["{bodyFMU}.body.servo_right_input"],
+		"{controllerFMU}.controller.servoLeftVal": ["{bodyFMU}.body.servo_left_input"]
+	},
+	"parameters": {
+		"{sensorFMU}.sensor1.lf_position_x": 0.019,
+		"{sensorFMU}.sensor1.lf_position_y": 0.099,
+		"{sensorFMU}.sensor2.lf_position_x": -0.019,
+		"{sensorFMU}.sensor2.lf_position_y": 0.099,
+		"{controllerFMU}.controller.forwardSpeed": 0.5,
+		"{controllerFMU}.controller.forwardRotate": 0.5,
+		"{controllerFMU}.controller.backwardRotate": 0
+	}
+}

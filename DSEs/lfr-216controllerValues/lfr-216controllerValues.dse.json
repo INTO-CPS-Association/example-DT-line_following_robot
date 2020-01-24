@@ -1,0 +1,89 @@
+{
+    "algorithm": {},
+    "objectiveConstraints": [],
+    "objectiveDefinitions": {
+        "externalScripts": {
+			"meanSpeed": {
+                "scriptFile": "meanSpeed.py",
+                "scriptParameters": {
+                    "1": "step-size",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y"
+					}
+				},
+			"lapTime": {
+                "scriptFile": "lapTime.py",
+                "scriptParameters": {
+                    "1": "time",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y",
+					"4": "studentMap"
+					}
+				},
+			"maxCrossTrackError": {
+                "scriptFile": "maxCrosstrackError.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.robot_x",
+					"2": "{bodyFMU}.body.robot_y"
+					}
+				},	
+			"meanCrossTrackError": {
+                "scriptFile": "meanCrosstrackError.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.robot_x",
+					"2": "{bodyFMU}.body.robot_y"
+					}
+				},
+			"lapEnergy": {
+                "scriptFile": "lapEnergy.py",
+                "scriptParameters": {
+					"1": "{bodyFMU}.body.total_energy_used",
+					"2": "{bodyFMU}.body.robot_x",
+					"3": "{bodyFMU}.body.robot_y"
+					}
+				}
+            
+        },
+        "internalFunctions": {}
+    },
+    "parameterConstraints": [],
+    "parameters": {
+        "{controllerFMU}.controller.forwardSpeed": [
+            0.2,
+			0.4,
+			0.6,
+			0.8,
+			0.9,
+			1.0
+        ],
+        "{controllerFMU}.controller.forwardRotate": [
+            0.3,
+			0.4,
+			0.5,
+			0.6,
+			0.7,
+			0.9
+        ],
+		"{controllerFMU}.controller.backwardRotate": [
+            0.0,
+			0.1,
+			0.2,
+			0.3,
+			0.4,
+			0.5
+        ]
+    },
+    "ranking": {
+        "pareto": {
+            "lapTime": "-",
+            "meanCrossTrackError": "-"
+        }
+    },
+	"scenarios": [
+		"studentMap"
+	],
+    "simulation": {
+        "endTime": "40",
+        "startTime": "0"
+    }
+}

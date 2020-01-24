@@ -1,0 +1,48 @@
+--##	EXPORT	ad6682ee28af362d17065b1f70b19954ef81479c	LFRController.fmu	2017-05-07 10:24:54	tool-wrapper	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	dfef021ed583d56ee21086b5295c6e9dc422fa63	LFRController.fmu	2017-05-07 10:05:41	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	d70b26039e7c45406f7162d6ccf178f272d8b47b	LFRController.fmu	2017-05-07 10:00:12	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	23253fe29132ec5f223bd157ffcad959f6256bb2	LFRController.fmu	2017-05-07 09:27:11	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	923a4e92220a157841155f72d3dcacd60cb99519	LFRController.fmu	2017-03-07 15:16:02	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	df3e5801d5de3cc52b17ec938852024482ef528e	LFRController.fmu	2017-03-07 14:59:05	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	f4b5512a5ffa5a8fbfa8133098d59f0ca8c6244	LFRController.fmu	2017-29-06 21:45:31	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	c21ab68507970f00c53d19b3017b89ff51bdfe90	LFRController.fmu	2017-29-06 21:44:56	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	fee1283e7ab42e9071804c243300ad31f1c5d140	LFRController.fmu	2017-29-06 21:38:04	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	a22c343cd26e8d403e50ed4bd2ac51f8456cb637	LFRController.fmu	2017-29-06 11:42:05	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	e5069084d43e50714e5ee845bf969472fef800f2	LFRController.fmu	2017-29-06 11:31:52	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	e8fd98a22e80ed82f7f078d29d03b9100e645f53	LFRController.fmu	2017-29-06 11:07:30	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	4d2fb259af22689c0fb0d07ae0ef670285366eb1	LFRController.fmu	2017-29-06 11:01:30	c-code	{"name":"fmu-import-export","version":"0.2.5-SNAPSHOT"}
+--##	EXPORT	3106979dfbd0340d2e2d45f9e6f78e7722f42a2f	LFRController.fmu	2017-29-03 14:35:01	tool-wrapper	{"name":"fmu-import-export","version":"0.2.1-SNAPSHOT"}
+--##	EXPORT	c02934b71efdee60336e540ec37497048345f3de	LFRController.fmu	2017-29-03 10:52:11	c-code	{"name":"fmu-import-export","version":"0.2.1-SNAPSHOT"}
+class HardwareInterface
+
+values
+    -- @ interface: type = parameter, name="forwardSpeed";
+    public forwardSpeed : RealPort = new RealPort(4.0);
+    -- @ interface: type = parameter, name="forwardRotate";
+    public forwardRotate : RealPort = new RealPort(5.0);
+    -- @ interface: type = parameter, name="backwardRotate";
+    public backwardRotate : RealPort = new RealPort(1.0);
+    -- @ interface: type = parameter, name="threshold";
+    public threshold : RealPort = new RealPort(400.0);
+
+
+instance variables
+    
+  -- @ interface: type = input, name="lfLeftVal";
+  public leftVal : RealPort := new RealPort(0.0);
+  -- @ interface: type = input, name="lfRightVal";
+  public rightVal : RealPort := new RealPort(0.0);
+  -- @ interface: type = input, name="total_energy_used";
+  public total_energy_used : RealPort := new RealPort(0.0);
+  
+instance variables
+
+  -- @ interface: type = output, name="servoRightVal";
+  public servo_right_out : RealPort := new RealPort(0.0);
+  -- @ interface: type = output, name="servoLeftVal";
+  public servo_left_out : RealPort := new RealPort(0.0);
+  
+end HardwareInterface
+
+
+  

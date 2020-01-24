@@ -1,0 +1,15 @@
+class RobotServo
+
+instance variables
+
+port : RealPort;
+
+operations
+
+public RobotServo: RealPort ==> RobotServo
+RobotServo(p) == port := p;
+
+public setServo: real ==> ()
+setServo(value)== port.setValue(value);
+
+end RobotServo

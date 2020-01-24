@@ -1,0 +1,27 @@
+{
+	"fmus": {
+		"{controllerFMU}": "LFRController.fmu",
+		"{sensorFMU}": "Sensor_Map1.fmu",
+		"{bodyFMU}": "Body.fmu"
+	},
+	"connections": {
+		"{bodyFMU}.body.robot_x": ["{sensorFMU}.sensor1.robot_x", "{sensorFMU}.sensor2.robot_x"],
+		"{bodyFMU}.body.robot_y": ["{sensorFMU}.sensor1.robot_y", "{sensorFMU}.sensor2.robot_y"],
+		"{bodyFMU}.body.robot_z": ["{sensorFMU}.sensor1.robot_z", "{sensorFMU}.sensor2.robot_z"],
+		"{bodyFMU}.body.robot_theta": ["{sensorFMU}.sensor1.robot_theta", "{sensorFMU}.sensor2.robot_theta"],
+		"{bodyFMU}.body.total_energy_used": ["{controllerFMU}.controller.total_energy_used"],
+		"{sensorFMU}.sensor1.lf_1_sensor_reading": ["{controllerFMU}.controller.lfLeftVal"],
+		"{sensorFMU}.sensor2.lf_1_sensor_reading": ["{controllerFMU}.controller.lfRightVal"],
+		"{controllerFMU}.controller.servoRightVal": ["{bodyFMU}.body.servo_right_input"],
+		"{controllerFMU}.controller.servoLeftVal": ["{bodyFMU}.body.servo_left_input"]
+	},
+	"parameters": {
+		"{sensorFMU}.sensor1.lf_position_x": 0.019,
+		"{sensorFMU}.sensor1.lf_position_y": 0.099,
+		"{sensorFMU}.sensor2.lf_position_x": -0.019,
+		"{sensorFMU}.sensor2.lf_position_y": 0.099,
+		"{controllerFMU}.controller.forwardSpeed": 0.5,
+		"{controllerFMU}.controller.forwardRotate": 0.5,
+		"{controllerFMU}.controller.backwardRotate": 0
+	}
+}

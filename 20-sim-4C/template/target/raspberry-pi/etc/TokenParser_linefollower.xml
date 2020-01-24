@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tokenParser xsi:noNamespaceSchemaLocation="tokenparser.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- Copy files that hold no tokens -->
+	<parse>
+		<parseFiles>
+			<!-- Copy the target common files -->
+			<files sourcePath="%FC_FORSEEDIR%\target\common\ivc">
+				<file copyOnly="true"><source>ivcdebug.h</source></file>
+				<file copyOnly="true"><source>ivcplatformfunctions.h</source></file>
+			</files>
+			<!-- The platform specific functions -->
+			<files sourcePath="%FC_FORSEEDIR%\target\common\xenomai">
+				<file copyOnly="true"><source>xenomai_ivcplatformfunctions.c</source></file>
+				<file copyOnly="true"><source>xenomai.mk</source></file>
+			</files>
+			<!-- The target specific I/O support functions -->
+			<files sourcePath="%FC_TARGETDIR%\src\wiringPi" destinationPath="wiringPi">
+				<file copyOnly="true"><source>mcp23008.c</source></file>
+				<file copyOnly="true"><source>mcp23008.h</source></file>
+				<file copyOnly="true"><source>mcp23x0817.h</source></file>
+				<file copyOnly="true"><source>mcp3422.c</source></file>
+				<file copyOnly="true"><source>mcp3422.h</source></file>
+				<file copyOnly="true"><source>wiringPi.c</source></file>
+				<file copyOnly="true"><source>wiringPi.h</source></file>
+				<file copyOnly="true"><source>version.h</source></file>
+				<file copyOnly="true"><source>softPwm.c</source></file>
+				<file copyOnly="true"><source>softPwm.h</source></file>
+				<file copyOnly="true"><source>softTone.c</source></file>
+				<file copyOnly="true"><source>softTone.h</source></file>
+				<file copyOnly="true"><source>piHiPri.c</source></file>
+				<file copyOnly="true"><source>wiringPiI2C.h</source></file>
+				<file copyOnly="true"><source>wiringPiI2C.c</source></file>
+				<file copyOnly="true"><source>ads1015.h</source></file>
+				<file copyOnly="true"><source>ads1015.c</source></file>
+				<file copyOnly="true"><source>mcp4725.h</source></file>
+				<file copyOnly="true"><source>mcp4725.c</source></file>
+			</files>
+			<files sourcePath="%FC_TARGETDIR%\src">
+				<file copyOnly="true"><source>wiringPi.mk</source></file>
+			</files>
+			<files sourcePath="%FC_TARGETDIR%\src\linefollower"  destinationPath="linefollower">
+				<file copyOnly="true"><source>io.h</source></file>
+				<file copyOnly="true"><source>io.c</source></file>
+			</files>
+			<files sourcePath="%FC_TARGETDIR%\src\linefollower">
+				<file copyOnly="true"><source>linefollower.mk</source></file>
+			</files>
+		</parseFiles>
+	</parse>
+	<!-- Parse the target common files that hold model/creator specific tokens -->
+	<!-- Parse the connect tokens (connect.tokens is automatically generated) -->
+	<parse>
+		<tokenFiles>
+			<tokenFile>tokens.xml</tokenFile>
+			<tokenFile>%FC_MODELBUILDDIR%\connect.tokens</tokenFile>
+		</tokenFiles>
+		<parseFiles>
+			<files sourcePath="%FC_FORSEEDIR%\target\common\ivc">
+				<file><source>ivcmain.c</source></file>
+				<file><source>ivcipcmodel.c</source></file>
+				<file><source>ivcipcmodel.h</source></file>
+				<file><source>ivcipclibrary.c</source></file>
+				<file><source>ivcipclibrary.h</source></file>
+				<file><source>ivcipc.c</source></file>
+				<file><source>ivcipc.h</source></file>
+				<file><source>ivcdefs.h</source></file>
+				<file><source>ivcio.h</source></file>
+				<file><source>ivcio.c</source></file>
+				<file><source>ivcstorage.c</source></file>
+				<file><source>ivcstorage.h</source></file>
+				<file><source>ivc.mk</source></file>
+			</files>
+		</parseFiles>
+	</parse>
+	<!-- Parse model creator (e.g. 20-sim) specific compile tokens -->
+	<parse>
+		<tokenFiles>
+			<tokenFile>tokens.xml</tokenFile>
+			<tokenFile>%FC_FORSEEDIR%\source\%FC_MODELCREATORNAME%\compile.tokens</tokenFile>
+			<tokenFile>%FC_MODELBUILDDIR%\compiler.tokens</tokenFile>
+		</tokenFiles>
+		<parseFiles>
+			<files sourcePath="%FC_MODELBUILDDIR%">
+				<!-- compile.xml is automatically generated from the tcf <COMPILERASSISTANT> section -->
+				<file replace="true"><source>compile.xml</source></file>
+			</files>
+			<files sourcePath="%FC_TARGETDIR%\src">
+				<file><source>Makefile</source></file>
+			</files>
+		</parseFiles>
+	</parse>
+</tokenParser>

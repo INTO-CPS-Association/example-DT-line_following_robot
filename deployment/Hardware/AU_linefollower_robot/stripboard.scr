@@ -1,0 +1,6 @@
+grid mil;
+display none tRestrict bRestrict;
+group all;
+delete (>-50.000000 -100.000000);
+wire 30;grid last;
+display last;

@@ -1,0 +1,14 @@
+Partlist exported from /Users/kel/Documents/eagle/AU_linefollower_robot/atmegaArduino.sch at 22/06/2017 09.07
+
+Part        Value                 Device          Package      Description                                 MF MPN OC_FARNELL OC_NEWARK
+AD          pin 1 = Arduino A0    PINHD-1X6/90    1X06/90      PIN HEADER                                                             
+C1          100nF                 C-EU050-025X075 C050-025X075 CAPACITOR, European symbol                                             
+IC1                               MEGA1284P       DIL40        Atmel ATmega1284P 8-bit AVR Microcontroller                            
+IOH         pin 1 = Arduino pin 8 PINHD-1X10/90   1X10/90      PIN HEADER                                                             
+IOL         pin 1 = Arduino pin 0 PINHD-1X8/90    1X08/90      PIN HEADER                                                             
+JTAG                              ML10L           ML10L        HARTING                                            unknown    unknown  
+POWER       pin 8 = Arduino Vin   PINHD-1X8/90    1X08/90      PIN HEADER                                                             
+RS-LEFT                           MA03-1          MA03-1       PIN HEADER                                         unknown    unknown  
+RS-RIGHT                          MA03-1          MA03-1       PIN HEADER                                         unknown    unknown  
+SERVO-LEFT                        MA03-1          MA03-1       PIN HEADER                                         unknown    unknown  
+SERVO-RIGHT                       MA03-1          MA03-1       PIN HEADER                                         unknown    unknown  

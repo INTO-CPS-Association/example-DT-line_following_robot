@@ -1,0 +1,67 @@
+class Controller
+
+instance variables
+	servoLeft: RobotServo;
+	servoRight: RobotServo;
+	sensorRightVal :RobotSensor;
+	sensorLeftVal :RobotSensor;
+
+operations
+
+	public Controller : RobotServo * RobotServo * RobotSensor * RobotSensor ==> Controller
+	Controller(servL, servR, sensRightVal, sensLeftVal) == 
+	(
+	  servoLeft:= servL; 
+  	servoRight:= servR;
+	  sensorRightVal:= sensRightVal;
+  	sensorLeftVal:= sensLeftVal
+  );
+
+   private control_loop : () ==> ()
+	control_loop() == cycles(0) 
+		let t = HardwareInterface`threshold.getValue(),
+				ls = sensorLeftVal.getReading(),
+				rs = sensorRightVal.getReading(),
+				fs = HardwareInterface`forwardSpeed.getValue(),
+				fr = HardwareInterface`forwardRotate.getValue(),
+				br = HardwareInterface`backwardRotate.getValue()
+	  in
+		(
+		
+	
+		if rs < t and ls < t then 
+		(
+			--   X  ||  X
+			-- none of the sensors triggered
+			-- Go strait => Right = !FW, Left = FW (motor mounted in rewerse)
+			servoRight.setServo(-fs);
+			servoLeft.setServo(fs);
+		);
+		
+		if rs < t and ls > t then
+		( 
+			--   X||    X
+			-- left triggered
+			-- Go Left away from line => Right = !FW, Left = RW (motor mounted in rewerse)
+			servoRight.setServo(-fr);
+			servoLeft.setServo(br);
+		);
+		
+		if rs > t and ls < t then 
+		(
+			--   X    ||X
+			-- right triggered
+			-- Go Right away from line => Right = !RW, Left = FW (motor mounted in rewerse)
+			servoRight.setServo(-br);
+			servoLeft.setServo(fr);
+		);
+
+		if rs > t and ls > t then 
+			skip
+   );
+
+thread
+
+--	periodic(10E6,0,0,0)(control_loop);	 
+		periodic(10000,0,0,0)(control_loop);	 
+end Controller
