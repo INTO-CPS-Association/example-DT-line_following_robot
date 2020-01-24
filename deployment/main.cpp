@@ -198,8 +198,8 @@ void setup() {
 	// turn on
 
 	Serial.println(F("starting motors low speed"));
-	analogWrite(enA, 50);
-	analogWrite(enB, 50);
+	analogWrite(enA, 45);
+	analogWrite(enB, 45);
 
 	for (int i = 0; i < 9; i++)
 		fmiBuffer.realBuffer[i] = 0.0;
